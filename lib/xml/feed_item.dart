@@ -1,5 +1,4 @@
 import 'package:flexireader/xml/feed_enclosure.dart';
-import 'package:flutter/foundation.dart';
 import 'package:xml/xml.dart' as xml;
 
 // inspired by https://github.com/xqwzts/feedparser
@@ -29,45 +28,35 @@ class FeedItem {
     try {
       title = node.findElements('title').single.text;
     } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
+      throw ("title exception $e");
     }
 
     String link = '';
     try {
       link = node.findElements('link').single.text;
     } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
+      throw ("link exception $e");
     }
 
     String description = '';
     try {
       description = node.findElements('description').single.text;
     } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
+      throw ("description exception $e");
     }
 
     String thumbnail = '';
     try {
       thumbnail = node.findElements('thumbnail').single.text;
     } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
+      throw ("thumbnail exception $e");
     }
 
     String pubDate = '';
     try {
       pubDate = node.findElements('pubDate').single.text;
     } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
+      throw ("pubDate exception $e");
     }
 
     // item enclosure
@@ -75,14 +64,14 @@ class FeedItem {
     try {
       enclosureElement = node.findElements('enclosure').single;
     } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
+      throw ("enclosureElement exception $e");
     }
 
     FeedEnclosure enclosure = FeedEnclosure('', '', '');
-    if (enclosureElement != null) {
+    try {
       enclosure = FeedEnclosure.fromXml(enclosureElement);
+    } catch (e) {
+      throw ("enclosure exception $e");
     }
 
     // item media:content
@@ -90,14 +79,14 @@ class FeedItem {
     try {
       mediaContentElement = node.findElements('media:content').first;
     } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
+      throw ("mediaContentElement exception $e");
     }
 
     FeedEnclosure mediaContent = FeedEnclosure('', '', '');
-    if (mediaContentElement != null) {
+    try {
       mediaContent = FeedEnclosure.fromXml(mediaContentElement);
+    } catch (e) {
+      throw ("mediaContent exception $e");
     }
 
     // item media:thumbnail
@@ -105,18 +94,18 @@ class FeedItem {
     try {
       mediaThumbnailElement = node.findElements('media:thumbnail').first;
     } catch (e) {
-      if (kDebugMode) {
-        print('parseXmlFeed exception: $e');
-      }
+      throw ('mediaThumbnailElement exception: $e');
     }
 
     FeedEnclosure mediaThumbnail = FeedEnclosure('', '', '');
-    if (mediaThumbnailElement != null) {
+    try {
       mediaThumbnail = FeedEnclosure.fromXml(mediaThumbnailElement);
+    } catch (e) {
+      throw ('mediaThumbnail exception: $e');
     }
 
     return FeedItem(
-        title: title,
+        title: title ,
         link: link,
         description: description,
         thumbnail: thumbnail,
