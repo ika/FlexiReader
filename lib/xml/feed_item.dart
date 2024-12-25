@@ -24,9 +24,11 @@ class FeedItem {
       this.mediaThumbnail});
 
   factory FeedItem.fromXml(xml.XmlElement node) {
-    String title = '';
+
+    // title
     try {
-      title = node.findElements('title').single.text;
+      tempTitle = node.findElements('title').single.text;
+    String title =(tempTitle.trim().isNotEmpty)? tempTitle : '';
     } catch (e) {
       throw ("title exception $e");
     }
