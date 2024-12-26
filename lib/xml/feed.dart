@@ -24,81 +24,31 @@ class Feed {
     this.items,
   });
 
-  // initializeFeed(){
-  //   return Feed (
-  //     title,
-  //     link,
-  //     description,
-  //     image: image,
-  //     language: language,
-  //     pubDate: pubDate,
-  //     items: items,
-  //   );
-  // }
-
   factory Feed.fromXml(xml.XmlElement node) {
-    String title = '';
-    try {
-      title = node.findElements('title').single.text;
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    }
-
-    String link = '';
-    try {
-      link = node.findElements('link').single.text;
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    }
-
-    String description = '';
-    try {
-      description = node.findElements('description').single.text;
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    }
-
-    String language = '';
-    try {
-      language = node.findElements('language').single.text;
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    }
-
-    String pubDate = '';
-    try {
-      pubDate = node.findElements('pubDate').single.text;
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    }
-
-    xml.XmlElement? imageElement;
-    try {
-      imageElement = node.findElements('image').single;
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    }
-
-    FeedImage image = FeedImage('assets/images/no_image.png');
-    if (imageElement != null) {
+    String extractText(String tagName) {
       try {
-        image = FeedImage.fromXml(imageElement);
+        return node.findElements(tagName).single.text.trim();
       } catch (e) {
         if (kDebugMode) {
-          print(e);
+          print('Error extracting $tagName: $e');
         }
+        return '';
+      }
+    }
+
+    String title = extractText('title');
+    String link = extractText('link');
+    String description = extractText('description');
+    String language = extractText('language');
+    String pubDate = extractText('pubDate');
+
+    FeedImage image = FeedImage('assets/images/no_image.png');
+    try {
+      var imageElement = node.findElements('image').single;
+      image = FeedImage.fromXml(imageElement);
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error extracting image: $e');
       }
     }
 
@@ -120,14 +70,6 @@ class Feed {
 
   @override
   String toString() {
-    return '''
-      title: $title
-      link: $link
-      description: $description
-      language: $language
-      pubDate: $pubDate
-      image: $image
-      items: $items
-      ''';
+    return 'title: $title, link: $link, description: $description, language: $language, pubDate: $pubDate, image: $image, items: $items';
   }
 }

@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:flexireader/db/database.dart';
+import 'package:flexireader/db/queries.dart';
 import 'package:flexireader/models/fmodel.dart';
 import 'package:flexireader/models/jmodel.dart';
 import 'package:flexireader/views/edit.dart';
@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // feeds.dart
 
-DBProvider dbProvider = DBProvider();
+DBQueries dbQueries = DBQueries();
 
 class FeedsPage extends StatefulWidget {
   const FeedsPage({super.key, required this.title});
@@ -33,7 +33,7 @@ class FeedsPageState extends State<FeedsPage> {
       JModel(title: fmodel.title, link: fmodel.link, feedid: fmodel.feedid),
     ]);
 
-    debugPrint(encodedData);
+    //debugPrint(encodedData);
 
     // save encoded data
     await SharedPreferences.getInstance().then((prefs) {
@@ -53,7 +53,7 @@ class FeedsPageState extends State<FeedsPage> {
   // update time stamp
   Future<Null> _updateFeedListItemTime(FModel fmodel) async {
     fmodel.time = DateTime.now().microsecondsSinceEpoch;
-    dbProvider.updateFeedItem(fmodel);
+    dbQueries.updateFeedItem(fmodel);
   }
 
   String shortenTitle(String n) {
@@ -88,7 +88,7 @@ class FeedsPageState extends State<FeedsPage> {
         children: <Widget>[
           Expanded(
             child: FutureBuilder<List<FModel>>(
-              future: dbProvider.getAllFeedItems(),
+              future: dbQueries.getAllFeedItems(),
               builder:
                   (BuildContext context, AsyncSnapshot<List<FModel>> snapshot) {
                 // Make sure data exists and is actually loaded

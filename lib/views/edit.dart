@@ -1,9 +1,10 @@
-import 'package:flexireader/db/database.dart';
+
+import 'package:flexireader/db/queries.dart';
 import 'package:flexireader/models/fmodel.dart';
 import 'package:flutter/material.dart';
 
 
-DBProvider dbProvider = DBProvider();
+DBQueries dbQueries = DBQueries();
 
 String? feedFunction;
 
@@ -62,7 +63,7 @@ class EditPageState extends State<EditPage> {
 
   _saveEdit() async {
     int time = DateTime.now().microsecondsSinceEpoch;
-    await dbProvider
+    await dbQueries
         .insertFeedItem(FModel(
             title: _controllerTitle.text,
             link: _controllerLink.text,
@@ -75,7 +76,7 @@ class EditPageState extends State<EditPage> {
 
   _updateEdit() async {
     int time = DateTime.now().microsecondsSinceEpoch;
-    await dbProvider.updateFeedItem(FModel(
+    await dbQueries.updateFeedItem(FModel(
         id: id,
         title: _controllerTitle.text,
         link: _controllerLink.text,
@@ -84,7 +85,7 @@ class EditPageState extends State<EditPage> {
   }
 
   void _deleteEdit() async {
-    await dbProvider.deleteFeedItem(id!).then(
+    await dbQueries.deleteFeedItem(id!).then(
       (value) {
         int count = 0;
         if (mounted) {
