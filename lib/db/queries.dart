@@ -3,6 +3,10 @@ import 'package:flexireader/models/cmodel.dart';
 import 'package:flexireader/models/fmodel.dart';
 import 'package:sqflite/sqflite.dart';
 
+// --------------------------------------------
+// queries.dart
+// --------------------------------------------
+
 DBProvider provider = DBProvider();
 
 // --------------------------------------------

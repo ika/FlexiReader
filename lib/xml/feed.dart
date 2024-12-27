@@ -1,6 +1,5 @@
 import 'package:flexireader/xml/feed_image.dart';
 import 'package:flexireader/xml/feed_item.dart';
-import 'package:flutter/foundation.dart';
 import 'package:xml/xml.dart' as xml;
 
 // inspired by https://github.com/xqwzts/feedparser
@@ -26,14 +25,9 @@ class Feed {
 
   factory Feed.fromXml(xml.XmlElement node) {
     String extractText(String tagName) {
-      try {
-        return node.findElements(tagName).single.text.trim();
-      } catch (e) {
-        if (kDebugMode) {
-          print('Error extracting $tagName: $e');
-        }
-        return '';
-      }
+      var tempNode = node.findElements(tagName).firstWhere((element) => true,
+          orElse: () => xml.XmlElement(xml.XmlName('')));
+      return tempNode.text.trim().isNotEmpty ? tempNode.text : '';
     }
 
     String title = extractText('title');
@@ -42,15 +36,12 @@ class Feed {
     String language = extractText('language');
     String pubDate = extractText('pubDate');
 
-    FeedImage image = FeedImage('assets/images/no_image.png');
-    try {
-      var imageElement = node.findElements('image').single;
-      image = FeedImage.fromXml(imageElement);
-    } catch (e) {
-      if (kDebugMode) {
-        print('Error extracting image: $e');
-      }
-    }
+    FeedImage image = FeedImage('');
+    
+    var tempImageElement = node.findElements('image').firstWhere(
+        (element) => true,
+        orElse: () => xml.XmlElement(xml.XmlName('assets/images/no_image.png')));
+    image = FeedImage.fromXml(tempImageElement);
 
     List<FeedItem> items = node
         .findElements('item')

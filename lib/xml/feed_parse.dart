@@ -18,13 +18,16 @@ import 'package:xml/xml.dart' as xml;
 Feed? parseFeed(String feedString) {
   Feed feed = Feed('', '', '');
 
-  if (feedString.isNotEmpty) {
-    xml.XmlDocument document = xml.XmlDocument.parse(feedString);
-    xml.XmlElement channelElement = document.rootElement
-        .findElements('channel')
-        .firstWhere((element) => true,
-            orElse: () => xml.XmlElement(xml.XmlName('')));
-    feed = Feed.fromXml(channelElement);
+  if (feedString.isEmpty) return feed;
+
+  xml.XmlDocument document = xml.XmlDocument.parse(feedString);
+  xml.XmlElement channelElement = document.rootElement
+      .findElements('channel')
+      .firstWhere((element) => true,
+          orElse: () => xml.XmlElement(xml.XmlName('')));
+
+  if (channelElement.text.trim() != '') {
+    return Feed.fromXml(channelElement);
   }
 
   return feed;
