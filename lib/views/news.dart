@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flexireader/db/queries.dart';
 import 'package:flexireader/models/fmodel.dart';
 import 'package:flexireader/models/jmodel.dart';
 import 'package:flexireader/views/feeds.dart';
@@ -12,7 +11,6 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:html/parser.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'dart:math';
 
 //import 'package:flutter_charset_detector/flutter_charset_detector.dart';
 
