@@ -1,4 +1,5 @@
 import 'package:flexireader/xml/feed.dart';
+import 'package:flutter/foundation.dart';
 import 'package:xml/xml.dart' as xml;
 
 // inspired by https://github.com/xqwzts/feedparser
@@ -19,6 +20,9 @@ Feed? parseFeed(String feedString) {
   Feed feed = Feed('', '', '');
 
   if (feedString.isEmpty) return feed;
+
+
+  //debugPrint("FEED STRING $feedString");
 
   xml.XmlDocument document = xml.XmlDocument.parse(feedString);
   xml.XmlElement channelElement = document.rootElement

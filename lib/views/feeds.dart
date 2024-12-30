@@ -109,7 +109,7 @@ class FeedsPageState extends State<FeedsPage> {
                       FModel fmodel = data[index];
 
                       return Column(
-                        children: <Widget>[
+                        children: [
                           ListTile(
                             title: Text(shortenTitle(fmodel.title!)),
                             onTap: () {

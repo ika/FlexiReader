@@ -8,7 +8,8 @@ import 'package:path/path.dart';
 // --------------------------------------------
 
 class DBProvider {
-  final String dbName = "feeda.db"; // change db name to update
+  final int dbVersion = 1;
+  final String dbName = "feedb.db"; // change db name to update
 
   factory DBProvider() => instance;
 

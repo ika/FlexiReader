@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:flexireader/db/queries.dart';
+import 'package:flexireader/models/fmodel.dart';
 import 'package:flexireader/models/jmodel.dart';
 import 'package:flexireader/views/feeds.dart';
 import 'package:flexireader/xml/feed.dart';
@@ -10,6 +12,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:html/parser.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:math';
 
 //import 'package:flutter_charset_detector/flutter_charset_detector.dart';
 
@@ -50,9 +53,9 @@ class NewsPageState extends State<NewsPage> {
   String _removeLeadingChars(String xmlString) {
     //List splitString = xmlString.split('<?xml');
     //String newString = '<?xml' + splitString[1];
-    return xmlString.substring(xmlString.indexOf('?>') + 2).trim();
+    //return xmlString.substring(xmlString.indexOf('?>') + 2).trim();
     //print(str);
-    //return str;
+    return xmlString;
   }
 
   Future<Null> getSharedPrefsFeedLink() async {
@@ -124,10 +127,19 @@ class NewsPageState extends State<NewsPage> {
   }
 
   FutureOr onReturnFromFeeds(dynamic value) {
-    final List<JModel> decodedData = JModel.decode(value);
+    List<JModel> decodedData = JModel.decode(value);
+
+    //debugPrint("RETURN FROM FEEDS VALUE $value");
 
     if (decodedData.first.link!.isEmpty) {
-      throw ('decodedData.first.link is empty!');
+      FModel fModel = FModel(
+          id: null,
+          title: "IOL South Africa",
+          link: "http://rss.iol.io/iol/news/south-africa",
+          feedid: 484946073,
+          time: null);
+
+      feedUrl = fModel.link.toString();
     } else {
       feedUrl = decodedData.first.link.toString();
     }
@@ -157,7 +169,10 @@ class NewsPageState extends State<NewsPage> {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.list, color: Colors.white,),
+            icon: Icon(
+              Icons.list,
+              color: Colors.white,
+            ),
             onPressed: () {
               navigateToFeedsPage();
             },
