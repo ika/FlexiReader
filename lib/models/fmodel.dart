@@ -15,6 +15,14 @@ class FModel {
     time = obj['time'];
   }
 
+  FModel.fromMap(dynamic map) {
+    id = map['id'];
+    title = map['title'];
+    link = map['link'];
+    feedid = map['feedid'];
+    time = map['time'];
+  }
+
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{};
 
@@ -27,13 +35,5 @@ class FModel {
     map['time'] = time;
 
     return map;
-  }
-
-  FModel.fromMap(dynamic map) {
-    id = map['id'];
-    title = map['title'];
-    link = map['link'];
-    feedid = map['feedid'];
-    time = map['time'];
   }
 }

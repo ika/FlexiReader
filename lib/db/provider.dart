@@ -26,7 +26,12 @@ class DBProvider {
     var databasesPath = await getDatabasesPath();
     var path = join(databasesPath, dbName);
 
-    var exists = await databaseExists(path);
+    bool exists = await databaseExists(path);
+
+    if (exists) {
+      Directory(path).delete(recursive: true);
+      exists = false;
+    }
 
     if (!exists) {
       try {
@@ -37,7 +42,6 @@ class DBProvider {
       List<int> bytes =
           data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
 
-      // Save copied asset to documents
       await File(path).writeAsBytes(bytes, flush: true);
     }
     return await openDatabase(path);

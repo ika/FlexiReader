@@ -72,7 +72,7 @@ class DBQueries {
         .rawQuery('SELECT COUNT(*) FROM $cacheTable WHERE feedid = $feedid'));
   }
 
-  Future<List<CModel>> getCacheByFeedId() async {
+  Future<List<CModel>> getCacheByFeedId(int randomNumber) async {
     final db = await provider.database;
     var result = await db.query(feedsTable, orderBy: 'time DESC');
     List<CModel> items =

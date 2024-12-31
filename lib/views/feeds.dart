@@ -30,7 +30,12 @@ class FeedsPageState extends State<FeedsPage> {
 
   void _encodeFeedListItemData(FModel fmodel) async {
     final String encodedData = JModel.encode([
-      JModel(title: fmodel.title, link: fmodel.link, feedid: fmodel.feedid),
+      JModel(
+          id: fmodel.id,
+          title: fmodel.title,
+          link: fmodel.link,
+          feedid: fmodel.feedid,
+          time: fmodel.time),
     ]);
 
     //debugPrint(encodedData);
@@ -145,7 +150,10 @@ class FeedsPageState extends State<FeedsPage> {
           _navigateToEditPage(FModel(id: null, title: '', link: ''));
         },
         tooltip: 'Add feed',
-        child: Icon(Icons.add, color: Colors.white,),
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
       ),
       floatingActionButtonLocation: _fapLocation,
       bottomNavigationBar: _BottomAppBar(

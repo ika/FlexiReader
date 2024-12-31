@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:math';
+import 'package:flexireader/db/queries.dart';
 import 'package:flexireader/models/fmodel.dart';
 import 'package:flexireader/models/jmodel.dart';
 import 'package:flexireader/views/feeds.dart';
@@ -125,20 +127,36 @@ class NewsPageState extends State<NewsPage> {
   }
 
   FutureOr onReturnFromFeeds(dynamic value) {
-    List<JModel> decodedData = JModel.decode(value);
-
     //debugPrint("RETURN FROM FEEDS VALUE $value");
 
-    if (decodedData.first.link!.isEmpty) {
-      FModel fModel = FModel(
-          id: null,
-          title: "IOL South Africa",
-          link: "http://rss.iol.io/iol/news/south-africa",
-          feedid: 484946073,
-          time: null);
+    if (value == null) {
+      int max = 8; // Number of feeds
+      int randomNumber = Random().nextInt(max) + 1;
 
-      feedUrl = fModel.link.toString();
+      //debugPrint(" RANDOM NUMBER $randomNumber");
+
+      DBQueries().getFeedItemById(randomNumber).then((value) {
+        if (value!.id != null) {
+          FModel fModel = FModel(
+              id: value.id,
+              title: value.title,
+              link: value.link,
+              feedid: value.feedid,
+              time: value.time);
+          feedUrl = fModel.link.toString();
+        } else {
+          throw ('No feeds found in onReturnFromFeeds');
+        }
+      });
+
+      // FModel fModel = FModel(
+      //     id: 0,
+      //     title: "IOL South Africa",
+      //     link: "http://rss.iol.io/iol/news/south-africa",
+      //     feedid: 484946073,
+      //     time: 0);
     } else {
+      List<JModel> decodedData = JModel.decode(value);
       feedUrl = decodedData.first.link.toString();
     }
 
@@ -146,7 +164,7 @@ class NewsPageState extends State<NewsPage> {
       updateTitle(loadingFeedMsg);
       load();
     } else {
-      throw ('$feedUrl is not valid in onReturnFromFeeds');
+      throw ('$feedUrl is not valid in onReturnFromFeeds');q
     }
   }
 
