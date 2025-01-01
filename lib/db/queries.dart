@@ -34,17 +34,24 @@ class DBQueries {
     return items;
   }
 
-  Future<int?> getFeedCount() async {
+  Future<int> getFeedCount() async {
     final db = await provider.database;
-    return Sqflite.firstIntValue(
+    int? feedCount = Sqflite.firstIntValue(
         await db.rawQuery('SELECT COUNT(*) FROM $feedsTable'));
+    return (feedCount != null) ? feedCount : 0;
   }
 
-  Future<FModel?> getFeedItemById(int id) async {
+  Future<List<FModel>> getFeedItemById(int id) async {
     final db = await provider.database;
-    List<Map> result =
-        await db.query(feedsTable, where: 'id = ?', whereArgs: [id]);
-    return (result.isNotEmpty) ? FModel.fromMap(result.first) : null;
+
+    //FModel emptyFModel =  FModel(id: 0, title: '', link: '', feedid: 0, time: 0);
+
+    var result = await db.query(feedsTable,
+        where: 'id = ?', orderBy: 'time DESC', whereArgs: [id]);
+
+    List<FModel> items =
+        result.isNotEmpty ? result.map((e) => FModel.fromMap(e)).toList() : [];
+    return items;
   }
 
   Future<int> deleteFeedItem(int id) async {
