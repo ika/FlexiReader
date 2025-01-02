@@ -164,7 +164,7 @@ class NewsPageState extends State<NewsPage> {
       updateTitle(loadingFeedMsg);
       load();
     } else {
-      throw ('$feedUrl is not valid in onReturnFromFeeds');q
+      throw ('$feedUrl is not valid in onReturnFromFeeds');
     }
   }
 
