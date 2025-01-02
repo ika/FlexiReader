@@ -126,35 +126,39 @@ class NewsPageState extends State<NewsPage> {
     return parsedString.trim();
   }
 
-  FutureOr onReturnFromFeeds(dynamic value) {
+  Future onReturnFromFeeds(dynamic value) async {
     //debugPrint("RETURN FROM FEEDS VALUE $value");
 
     if (value == null) {
-      int max = 8; // Number of feeds
-      int randomNumber = Random().nextInt(max) + 1;
+      DBQueries dbQueries = DBQueries();
 
+      int max = await dbQueries.getFeedCount();
+      int randomNumber = Random().nextInt(max) + 1;
       //debugPrint(" RANDOM NUMBER $randomNumber");
 
-      DBQueries().getFeedItemById(randomNumber).then((value) {
-        if (value!.id != null) {
-          FModel fModel = FModel(
-              id: value.id,
-              title: value.title,
-              link: value.link,
-              feedid: value.feedid,
-              time: value.time);
-          feedUrl = fModel.link.toString();
-        } else {
-          throw ('No feeds found in onReturnFromFeeds');
-        }
-      });
+      List<FModel> randomModelById = await dbQueries.getFeedItemById(randomNumber);
+      //debugPrint("RETURN RANDOM BY ID FEEDS VALUE ${randomModelById.first.title}");
 
-      // FModel fModel = FModel(
-      //     id: 0,
-      //     title: "IOL South Africa",
-      //     link: "http://rss.iol.io/iol/news/south-africa",
-      //     feedid: 484946073,
-      //     time: 0);
+      FModel fModel = FModel(id: 0, title: '', link: '', feedid: 0, time: 0);
+
+      if (randomModelById.first.link!.isNotEmpty) {
+        fModel = FModel(
+            id: randomModelById.first.id,
+            title: randomModelById.first.title,
+            link: randomModelById.first.link,
+            feedid: randomModelById.first.feedid,
+            time: randomModelById.first.time);
+      } else {
+        fModel = FModel(
+            id: 0,
+            title: "IOL South Africa",
+            link: "http://rss.iol.io/iol/news/south-africa",
+            feedid: 484946073,
+            time: 0);
+      }
+
+      feedUrl = fModel.link.toString();
+
     } else {
       List<JModel> decodedData = JModel.decode(value);
       feedUrl = decodedData.first.link.toString();

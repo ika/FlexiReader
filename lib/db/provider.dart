@@ -28,10 +28,10 @@ class DBProvider {
 
     bool exists = await databaseExists(path);
 
-    if (exists) {
-      Directory(path).delete(recursive: true);
-      exists = false;
-    }
+    // if (exists) {
+    //   Directory(path).delete(recursive: true);
+    //   exists = false;
+    // }
 
     if (!exists) {
       try {
